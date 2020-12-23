@@ -82,7 +82,9 @@
 </template>
 
 <script>
+import Cookies from 'vue-cookie';
 export default {
+  middleware: 'authen',
   name: 'Stock',
   async created () {
     await this.loadProduct();
@@ -127,7 +129,8 @@ export default {
       this.stock = stock.result;
     },
     async loadProduct () {
-      const product = await (this.$axios.$get("products"));
+      const login = JSON.parse(Cookies.get("user"));
+      const product = await (this.$axios.$get("products/t/" + login._id));
       this.products = product.result;
       this.products.forEach(item => {
         item.name_and_detail = item.pro_name + " - " + item.pro_detail;

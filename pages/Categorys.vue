@@ -212,8 +212,10 @@
 </template>
 
 <script>
+import moduleName from 'vue-cookie';
 export default {
   name: 'Categorys',
+  middleware: 'authen',
   async created () {
     await this.loadCategories();
   },

@@ -564,7 +564,9 @@
 </template>
 
 <script>
+import Cookies from 'vue-cookie';
 export default {
+  middleware: 'authen',
   name: 'Users',
   async created () {
     await this.loadUser();
@@ -648,7 +650,9 @@ export default {
       this.loadUser();
     },
     async loadUser () {
-      const users = await (this.$axios.$get("/users"));
+      const login = JSON.parse(Cookies.get("user"));
+      this.form.reference_user_id = login._id;
+      const users = await (this.$axios.$get("/users/t/" + login._id));
       this.users = users.result;
     },
     async addUser () {

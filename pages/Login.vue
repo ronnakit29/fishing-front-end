@@ -42,14 +42,9 @@
               large
               block
               elevation="0"
-              @click="userLogin"
             >
               <v-icon left>mdi-login-variant </v-icon>เข้าสู่ระบบ
             </v-btn>
-            <p
-              class="red--text"
-              v-if="status != null"
-            >{{ status }}</p>
           </v-card-text>
           <v-card-text>
             <v-img src="/download.png">
@@ -64,6 +59,7 @@
 <script>
 import Cookies from 'vue-cookie';
 export default {
+  middleware: 'authen',
   layout: 'Authen',
   name: 'Login',
   created () {
@@ -74,8 +70,7 @@ export default {
       login: {
         username: null,
         password: null
-      },
-      status: ""
+      }
     }
   },
   props: {
@@ -83,20 +78,13 @@ export default {
   },
   methods: {
     async userLogin () {
-      try {
-        const login = await (this.$axios.$post("authen/login", this.login));
-        if (login.user != null) {
-          location.href = "/users"
-          this.status = "";
-          Cookies.set("user", JSON.stringify(login.user));
-          // alert(Cookies.get("user"));
-        } else {
-          this.status = login.message
-        }
-      } catch (err) {
-        console.log(err);
-      }
+      const login = await (this.$axios.$post("authen/login", this.login));
+      if (login.user != null) {
+        window.location.href = "/users"
+        Cookies.set("user", login.user);
+      } else {
 
+      }
     }
   },
 }

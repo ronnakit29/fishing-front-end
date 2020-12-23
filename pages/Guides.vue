@@ -52,6 +52,7 @@
                     item-text="user_fullname"
                     item-value="_id"
                     v-model="form.user_id"
+                    :disabled="true"
                   ></v-autocomplete>
                   <v-text-field
                     label="หัวข้อ"
@@ -117,6 +118,7 @@
                     item-text="user_fullname"
                     item-value="_id"
                     v-model="form.user_id"
+                    :disabled="true"
                   ></v-autocomplete>
                   <v-text-field
                     label="หัวข้อ"
@@ -250,7 +252,9 @@
 </template>
 
 <script>
+import Cookies from 'vue-cookie';
 export default {
+  middleware: 'authen',
   name: 'Guides',
   async created () {
     await this.loadGuides();
@@ -306,8 +310,10 @@ export default {
       this.loadGuides();
     },
     async loadGuides () {
+      const login = JSON.parse(Cookies.get("user"));
+      this.form.user_id = login._id;
       const users = await (this.$axios.$get("/users"));
-      const guides = await (this.$axios.$get("/guides"));
+      const guides = await (this.$axios.$get("/guides/t/" + login._id));
       this.guides = guides.result;
       this.users = users.result;
       this.users.forEach(item => {

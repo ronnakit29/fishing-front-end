@@ -116,6 +116,7 @@
                     item-text="user_fullname"
                     item-value="_id"
                     v-model="form.user_id"
+                    :disabled="true"
                   >
                   </v-autocomplete>
                   <v-text-field
@@ -244,7 +245,9 @@
 </template>
 
 <script>
+import Cookies from 'vue-cookie';
 export default {
+  middleware: 'authen',
   name: 'Fishs',
   async created () {
     await this.loadFish();
@@ -301,8 +304,11 @@ export default {
       this.loadFish();
     },
     async loadFish () {
+      const login = JSON.parse(Cookies.get("user"));
+      this.form.user_id = login._id;
+      console.log(login);
       const users = await (this.$axios.$get("/users"));
-      const fish = await (this.$axios.$get("/fish"));
+      const fish = await (this.$axios.$get(`/fish/t/${login._id}`));
       this.users = users.result;
       this.users.forEach(item => {
         item.user_fullname = item.user_firstname + " " + item.user_lastname;
@@ -317,6 +323,8 @@ export default {
       this.result = fish.result;
     },
     resetForm () {
+      const login = JSON.parse(Cookies.get("user"));
+      this.form.user_id = login._id;
       this.form = {
         user_id: null,
         fish_name: null,

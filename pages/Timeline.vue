@@ -125,6 +125,7 @@
                   v-bind="attrs"
                   v-on="on"
                   large
+                  v-if="fish != []"
                 >
                   เพิ่มช่วงเวลาการเลี้ยง <v-icon>mdi-plus-box</v-icon>
                 </v-btn>
@@ -281,7 +282,9 @@
 </template>
 
 <script>
+import Cookies from 'vue-cookie';
 export default {
+  middleware: 'authen',
   name: 'Timeline',
   async created () {
     await this.loadTimeline();
@@ -329,7 +332,8 @@ export default {
   methods: {
     async loadTimelineFish () {
       this.form.fish_type = this.search;
-      const timeline = await (this.$axios.$get("timeline/t/5fdf4cb8ccaa3d167cf4daa6/f/" + this.search));
+      const login = JSON.parse(Cookies.get("user"));
+      const timeline = await (this.$axios.$get("timeline/t/" + login._id + "/f/" + this.search));
       this.timeline = timeline.result;
       console.log(timeline.result)
     },
@@ -354,9 +358,11 @@ export default {
       this.loadTimelineFish();
     },
     async loadTimeline () {
+      const login = JSON.parse(Cookies.get("user"));
       const users = await (this.$axios.$get("/users"));
       const products = await (this.$axios.$get("/products"));
-      const fish = await (this.$axios.$get("/fish"));
+
+      const fish = await (this.$axios.$get("/fish/t/" + login._id));
       this.fish = fish.result;
       this.products = products.result;
       this.users = users.result;

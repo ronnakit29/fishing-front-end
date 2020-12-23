@@ -360,7 +360,9 @@
 </template>
 
 <script>
+import Cookies from 'vue-cookie';
 export default {
+  middleware: 'authen',
   name: 'Products',
   created () {
     this.loadProducts()
@@ -451,9 +453,10 @@ export default {
       this.select.category = category.result;
     },
     async loadProducts () {
+      const login = JSON.parse(Cookies.get("user"));
       await this.loadCategory();
       this.datatable.loading = true;
-      this.products = (await this.$axios.$get('products')).result;
+      this.products = (await this.$axios.$get('products/t/' + login._id)).result;
       this.datatable.loading = false;
     },
     async addProduct () {
@@ -462,12 +465,13 @@ export default {
       this.dialog.add = false;
     },
     resetForm () {
+      const login = JSON.parse(Cookie.get("user"));
       this.form = {
         pro_stock: null,
         pro_status: true,
         pro_cost: null,
         pro_price: null,
-        tra_id: null,
+        tra_id: login._id,
         pro_name: null,
         pro_detail: null,
         category_id: null,

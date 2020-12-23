@@ -22,6 +22,14 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
+        <v-list-item @click="logout">
+          <v-list-item-action>
+            <v-icon>mdi-logout</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="'ออกจากระบบ'" />
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
@@ -49,7 +57,16 @@
 </template>
 
 <script>
+import Cookies from 'vue-cookie';
 export default {
+  created () {
+    // const login = Cookies.get('user');
+    // console.log(login);
+    // this.items.forEach(item => {
+    //   if (item.role.includes(login.user_role)) { item.show = true; }
+    //   else { item.show = false; }
+    // });
+  },
   data () {
     return {
       clipped: true,
@@ -59,48 +76,55 @@ export default {
         {
           icon: 'mdi-account-multiple',
           title: 'สมาชิก',
-          to: '/users'
+          to: '/users',
+          role: ['admin', 'trainer']
         },
         {
           icon: 'mdi-cart',
           title: 'รายการสินค้า',
-          to: '/products'
+          to: '/products',
+          role: ['admin', 'trainer']
         },
         {
           icon: 'mdi-cart',
           title: 'ประเภทสินค้า',
-          to: '/categorys'
+          to: '/categorys',
+          role: ['admin']
         },
         {
           icon: 'mdi-cart',
           title: 'สต๊อกสินค้า',
-          to: '/stock'
+          to: '/stock',
+          role: ['trainer']
         },
         {
           icon: 'mdi-fish',
           title: 'ประเภทปลา',
-          to: '/fishs'
+          to: '/fishs',
+          role: ['trainer']
         },
         {
           icon: 'mdi-timeline-clock',
           title: 'ช่วงเวลาการเลี้ยง',
-          to: '/timeline'
+          to: '/timeline',
+          role: ['trainer']
         },
         {
           icon: 'mdi-book-open-page-variant',
           title: 'คู่มือคำแนะนำ',
-          to: '/guides'
+          to: '/guides',
+          role: ['trainer']
         },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
       title: 'ForFishFarm Manager'
+    }
+  },
+  methods: {
+    async logout () {
+      location.href = "/";
     }
   }
 }
