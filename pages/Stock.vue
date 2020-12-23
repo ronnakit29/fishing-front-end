@@ -127,6 +127,9 @@ export default {
       this.form.pro_id = this.search;
       const stock = await (this.$axios.$get("stock/p/" + this.search));
       this.stock = stock.result;
+      this.stock.forEach(item => {
+        item.stock_date = new Date(item.stock_date).toLocaleString("th-TH");
+      })
     },
     async loadProduct () {
       const login = JSON.parse(Cookies.get("user"));
