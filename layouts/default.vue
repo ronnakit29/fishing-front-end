@@ -104,6 +104,12 @@ export default {
           role: ['trainer']
         },
         {
+          icon: 'mdi-fish',
+          title: 'บ่อเลี้ยงปลา',
+          to: '/pond',
+          role: ['trainer']
+        },
+        {
           icon: 'mdi-timeline-clock',
           title: 'ช่วงเวลาการเลี้ยง',
           to: '/timeline',

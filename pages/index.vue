@@ -86,9 +86,14 @@ export default {
       try {
         const login = await (this.$axios.$post("authen/login", this.login));
         if (login.user != null) {
-          location.href = "/users"
-          this.status = "";
-          Cookies.set("user", JSON.stringify(login.user));
+          if (login.user.user_role == 'admin' || login.user.user_role == 'trainer') {
+            location.href = "/users"
+            this.status = "";
+            Cookies.set("user", JSON.stringify(login.user));
+          } else {
+            this.status = "Sorry you can't access!"
+          }
+
           // alert(Cookies.get("user"));
         } else {
           this.status = login.message

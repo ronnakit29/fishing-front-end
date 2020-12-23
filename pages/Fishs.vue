@@ -51,6 +51,7 @@
                     item-text="user_fullname"
                     item-value="_id"
                     v-model="form.user_id"
+                    :disabled="true"
                   >
                   </v-autocomplete>
                   <v-text-field
@@ -324,9 +325,8 @@ export default {
     },
     resetForm () {
       const login = JSON.parse(Cookies.get("user"));
-      this.form.user_id = login._id;
       this.form = {
-        user_id: null,
+        user_id: login._id,
         fish_name: null,
         fish_growth_time: null,
         fish_price: null

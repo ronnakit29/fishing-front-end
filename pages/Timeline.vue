@@ -8,7 +8,7 @@
       >
         <v-card-text>
           <h2>
-            <v-icon>mdi-card-search</v-icon> ค้นหาข้อมูลช่วงเวลาการเลี้ย
+            <v-icon>mdi-card-search</v-icon> ค้นหาข้อมูลช่วงเวลาการเลี้ยง
           </h2>
         </v-card-text>
         <v-card-text>
@@ -56,6 +56,7 @@
                     item-text="user_fullname"
                     item-value="_id"
                     v-model="form.user_id"
+                    :disabled="true"
                   ></v-autocomplete>
                   <v-text-field
                     label="วันที่"
@@ -143,6 +144,7 @@
                     item-text="user_fullname"
                     item-value="_id"
                     v-model="form.user_id"
+                    :disabled="true"
                   ></v-autocomplete>
                   <v-text-field
                     label="วันที่"
@@ -359,6 +361,7 @@ export default {
     },
     async loadTimeline () {
       const login = JSON.parse(Cookies.get("user"));
+      this.form.user_id = login._id;
       const users = await (this.$axios.$get("/users"));
       const products = await (this.$axios.$get("/products"));
 
@@ -379,9 +382,10 @@ export default {
       this.result = timeline.result;
     },
     resetForm () {
+      const login = JSON.parse(Cookies.get("user"));
       this.form = {
         product_recommend: [],
-        user_id: null,
+        user_id: login._id,
         timeline_day: null,
         timeline_title: null,
         timeline_detail: null,
